@@ -4,3 +4,12 @@ Components Required:
 3.LED-4
 4.Jumer Wires
 5.Bread board
+
+### *GPIO Pin Mapping (Recommended)*
+| Binary Bit | LED | GPIO Pin |
+|------------|-----|---------|
+| 2⁰ (LSB)  | LED1 | PC4 |
+| 2¹        | LED2 | PC5 |
+| 2²        | LED3 | PC6 |
+| 2³ (MSB)  | LED4 | PC7 |
+| Buzzer    | Buzzer | PC8 |
