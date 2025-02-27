@@ -1,0 +1,33 @@
+#include "ch32v00x.h"
+#include "debug.h"
+void setup() {
+    RCC->APB2PCENR |= RCC_APB2Periph_GPIOC;  // Enable GPIOC clock
+
+    GPIOC->CFGLR &= ~(0xFFFF << (4 * 4));    // Clear configuration for PC4 - PC7
+    GPIOC->CFGLR |= (0x1111 << (4 * 4));     // Set PC4 - PC7 as output (LEDs)
+
+    GPIOC->CFGLR &= ~(0xF << (8 * 4));       // Clear configuration for PC8
+    GPIOC->CFGLR |= (0x1 << (8 * 4));        // Set PC8 as output (Buzzer)
+
+    GPIOC->BSHR |= (0x1F << 4);  // Turn off all LEDs and Buzzer initially
+}
+void loop() {
+    for (uint8_t count = 0; count < 16; count++) {
+        GPIOC->BCR |= (0xF << 4);  // Clear LED bits (turn off all LEDs)
+        GPIOC->BSHR |= ((count & 0xF) << 4); // Set LED bits to show binary count
+
+        if (count == 15) {
+            GPIOC->BSHR |= (1 << 8);  // Turn on Buzzer at 15
+            Delay_Ms(500);           // Buzzer on for 500ms
+            GPIOC->BCR |= (1 << 8);  // Turn off Buzzer
+        }
+
+        Delay_Ms(1000);  // 1-second delay between counts
+    }
+}
+int main() {
+    setup();
+    while (1) {
+        loop();
+    }
+}
